@@ -1,6 +1,9 @@
 <?php
 
 class router {
+//Traiter le cas ou il y a l'action
+// Traiter le cas ou il n'y a pas d'action 
+
 // récuperer la requete
 // parser la requete et definir selon le schema suivant :
 //controller/action/[param1/param2]
@@ -22,7 +25,6 @@ private $url_parsed;
        if (count($this->url) > 0) {
               $this->url_parsed['params'] = $this->url;
        }
-
-       var_dump($this->url_parsed);
+       return $this->url_parsed;
     }
 } 
