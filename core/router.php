@@ -22,9 +22,13 @@ private $url_parsed;
        
        $this->url = array_slice($this->url, 2);
 
-       if (count($this->url) > 0) {
+
+        if (count($this->url) > 0) {
               $this->url_parsed['params'] = $this->url;
-       }
+        }
+        else {
+            $this->url_parsed['params'][] = 'index';
+        }
        return $this->url_parsed;
     }
 } 
