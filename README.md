@@ -1,3 +1,2 @@
 # framework_base
-
-ddd
+ceci est une demo
