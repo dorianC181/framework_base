@@ -1,7 +1,9 @@
 <?php
+
 class kernel {
     public function __construct()
     {
-        echo "kernel";
+        $router = new router();
+        $router->parse();
     }
 }

@@ -1,7 +1,5 @@
 <?php
-require_once ("define.php");
-
-require_once ("kernel.php");
+require_once ("require.php");
 
 $kernel = new kernel();
 ?>
