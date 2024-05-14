@@ -104,4 +104,11 @@ class userModel {
 
         return $result = $this->executeSave();
         }
+    
+    public function delete($data)
+    {
+        $this->sql = "DELETE FROM ".$this->table." WHERE id = :id";
+        $this->params = $data;
+        $res = $this->fetch();
+    }
 }

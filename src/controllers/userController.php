@@ -23,7 +23,7 @@ class userController {
 
     public function index($id_user)
     {
-        $this->user->update(["nom"=>"CATRIC"], 
-        ["id"=>$id_user]);
+        $this->user->delete(['id' => $id_user]);
+        
     }
 }
