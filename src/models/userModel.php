@@ -110,5 +110,6 @@ class userModel {
         $this->sql = "DELETE FROM ".$this->table." WHERE id = :id";
         $this->params = $data;
         $res = $this->fetch();
+
     }
 }
