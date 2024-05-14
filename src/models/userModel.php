@@ -4,6 +4,8 @@ class userModel {
     private $dbh;
     private $table = "user";
     private $sql;
+    private $stmt;
+    private $cond;
 
     public function __construct()
     {
@@ -27,12 +29,35 @@ class userModel {
     }
 
     private function execute() {
-         $this->stmt->execute();
+         $this->stmt->execute($this->params);
     }
 
-    private function fetchAll() {
+    private function fetchAll($mode = PDO::FETCH_ASSOC) {
         $this->prepare($this->sql);
         $this->execute();
-        return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $this->stmt->fetchAll($mode);
+    }
+
+    public function find($cond)
+    {
+        $this->sql = "SELECT * FROM ".$this->table." WHERE ";
+        $this->params = $cond;
+        var_dump($cond);
+        foreach ($cond as $key => $value) {
+            $this->sql .= $key."=:".$key;
+            if(count($cond) > 1) {
+                $this->sql .= " AND ";
+            }
+        }
+        $this->sql = substr($this->sql, 0, -4);
+        
+        $result = $this->fetch();
+        var_dump($result);
+    }
+
+    private function fetch($mode = PDO::FETCH_ASSOC) {
+        $this->prepare($this->sql);
+        $this->execute();
+        return $this->stmt->fetch($mode);
     }
 }

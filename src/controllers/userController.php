@@ -21,8 +21,11 @@ class userController {
         $this->$mdl_name = new $file_name();
     }
 
-    public function index()
+    public function index($id_user)
     {
-        $this->user->findAll();
+        $this->user->find([
+            "id"=>$id_user,
+            "nom"=>"CATRIC"
+        ]);
     }
 }
