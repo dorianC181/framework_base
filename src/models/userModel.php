@@ -68,18 +68,28 @@ class userModel {
         $this->params = $data;
         $values = "";
         foreach ($data as $k => $v) {
-            $this->sql .= $k.",";
-            $values.= ":".$k.",";
+            $this->sql .= $k.", ";
+            $values.= ":".$k.", ";
         }
-        $this->sql = substr($this->sql, 0, -2);
         $values = substr($values, 0, -2);
+        $this->sql = substr($this->sql, 0, -2);
         $this->sql .= ") VALUES(".$values.")";
 
         echo $this->sql;
         $result = $this->fetch();
         
-        
         return $this->dbh->lastInsertId();
     }
 
+    public function update($data)
+    {
+        $this->sql = "UPDATE ".$this->table." SET ";
+        $this->params = $data;
+        foreach ($data as $k => $v) {
+            $this->sql .= $k."=:".$k.", ";
+        }
+        $this->sql = substr($this->sql, 0, -2);
+        $this->sql .= " WHERE id";
+        $result = $this->fetch();
+        }
 }
