@@ -61,7 +61,7 @@ class userModel {
         $this->execute();
         return $this->stmt->fetch($mode);
     }
-
+        
     public function insert($data)
     {
         $this->sql = "INSERT INTO ".$this->table."(";
