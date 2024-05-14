@@ -1,13 +1,28 @@
 <?php
 
+#[AllowDynamicProperties]
 class userController {
 
     public function __construct()
     {
+        $this->loadModel("user");
     }
 
-    public function index($user_id)
+    private function loadModel($mdl_name)
     {
-        echo "$user_id";
+        $file_name = $mdl_name."Model";
+        
+        if(file_exists(MODELS.DS.$file_name.".php")) {
+            require_once(MODELS.DS.$file_name.".php");
+        } else {
+            echo "Le model n'existe pas";
+        }
+
+        $this->$mdl_name = new $file_name();
+    }
+
+    public function index()
+    {
+        $this->user->findAll();
     }
 }
