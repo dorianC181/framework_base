@@ -61,7 +61,13 @@ class userModel {
         $this->execute();
         return $this->stmt->fetch($mode);
     }
-        
+
+    private function executeSave() {
+        $this->prepare($this->sql);
+        $this->stmt->execute($this->params);
+        return $this->stmt->rowCount();
+    }
+
     public function insert($data)
     {
         $this->sql = "INSERT INTO ".$this->table."(";
@@ -85,11 +91,17 @@ class userModel {
     {
         $this->sql = "UPDATE ".$this->table." SET ";
         $this->params = $data;
+        $where = "";
         foreach ($data as $k => $v) {
-            $this->sql .= $k."=:".$k.", ";
+            if($k == "id") {
+                $where .= " WHERE ".$k."= :".$k;
+            } else {
+                $this->sql .= $k."=:".$k.", ";
+            }
         }
         $this->sql = substr($this->sql, 0, -2);
-        $this->sql .= " WHERE id";
-        $result = $this->fetch();
+        $this->sql .= $where;
+
+        return $result = $this->executeSave();
         }
 }
