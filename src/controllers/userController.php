@@ -23,9 +23,13 @@ class userController {
 
     public function index($id_user)
     {
-        $this->user->find([
-            "id"=>$id_user,
-            "nom"=>"CATRIC"
+        $this->user->insert([
+            "nom"=>"Plateau",
+            "prenom"=>"Leo",
+            "email"=>"leo.platau@estiam.com"
         ]);
     }
 }
+
+
+//        $this->user->find(["id"=>$id_user, "nom"=>"CATRIC"]);

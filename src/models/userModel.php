@@ -6,6 +6,7 @@ class userModel {
     private $sql;
     private $stmt;
     private $cond;
+    private $data;
 
     public function __construct()
     {
@@ -50,7 +51,7 @@ class userModel {
             }
         }
         $this->sql = substr($this->sql, 0, -4);
-        
+
         $result = $this->fetch();
         var_dump($result);
     }
@@ -60,4 +61,25 @@ class userModel {
         $this->execute();
         return $this->stmt->fetch($mode);
     }
+
+    public function insert($data)
+    {
+        $this->sql = "INSERT INTO ".$this->table."(";
+        $this->params = $data;
+        $values = "";
+        foreach ($data as $k => $v) {
+            $this->sql .= $k.",";
+            $values.= ":".$k.",";
+        }
+        $this->sql = substr($this->sql, 0, -2);
+        $values = substr($values, 0, -2);
+        $this->sql .= ") VALUES(".$values.")";
+
+        echo $this->sql;
+        $result = $this->fetch();
+        
+        
+        return $this->dbh->lastInsertId();
+    }
+
 }
