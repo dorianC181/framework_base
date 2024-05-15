@@ -11,7 +11,6 @@ class userController {
     {
         $this->loadModel("user");
     }
-
     
     private function css ($ar) {
         foreach ($ar as $v) {
@@ -63,11 +62,12 @@ class userController {
     }
     
 
-    public function index()
+    public function index($id_role)
     {
-        $this->set("title", "User Index");
-        $this->set("users", $this->user->findAll());
-        $this->render("index");
+        $this->loadModel('role');
+        $data = [
+            "libelle" => "test"
+        ];
+        $this->role->save($data);
     }
-
 }

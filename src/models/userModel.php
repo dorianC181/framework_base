@@ -1,29 +1,10 @@
 <?php
 
-class userModel {
-    private $dbh;
-    private $table = "user";
-    private $sql;
-    private $stmt;
-    private $cond;
-    private $data;
-    private $params;
+class userModel extends model{
 
-    public function __construct()
+    public function __init()
     {
-        $pass = "";
-        $user = "root";
-        try {
-            $this->dbh = new PDO('mysql:host=localhost;dbname=framework_base', $user, $pass);
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-    }
-    public function findAll()
-    {
-        $this->sql = "SELECT * FROM ".$this->table;
-        $result = $this->fetchAll();
-        return $result;
+        $this->table = "user";
     }
 
     private function prepare() {
@@ -31,14 +12,9 @@ class userModel {
     }
 
     private function execute() {
-         $this->stmt->execute($this->params);
+        $this->stmt->execute($this->params);
     }
 
-    private function fetchAll($mode = PDO::FETCH_ASSOC) {
-        $this->prepare($this->sql);
-        $this->execute();
-        return $this->stmt->fetchAll($mode);
-    }
 
     public function find($cond)
     {
@@ -57,31 +33,7 @@ class userModel {
         var_dump($result);
     }
 
-    private function fetch($mode = PDO::FETCH_ASSOC) {
-        $this->prepare($this->sql);
-        $this->execute();
-        return $this->stmt->fetch($mode);
-    }
-
-    public function insert($data)
-    {
-        $this->sql = "INSERT INTO ".$this->table."(";
-        $this->params = $data;
-        $values = "";
-        foreach ($data as $k => $v) {
-            $this->sql .= $k.",";
-            $values.= ":".$k.",";
-        }
-        $this->sql = substr($this->sql, 0, -2);
-        $values = substr($values, 0, -2);
-        $this->sql .= ") VALUES(".$values.")";
-
-        echo $this->sql;
-        $result = $this->fetch();
-        
-        
-        return $this->dbh->lastInsertId();
-    }
+   
 
     public function update($data)
     {
