@@ -83,8 +83,6 @@ class userModel {
         return $this->dbh->lastInsertId();
     }
 
-<<<<<<< Updated upstream
-=======
     public function update($data)
     {
         $this->sql = "UPDATE ".$this->table." SET ";
@@ -109,5 +107,4 @@ class userModel {
         $this->params = $data;
         $res = $this->fetch();
     }
->>>>>>> Stashed changes
 }

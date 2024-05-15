@@ -40,18 +40,6 @@ class userController {
 
     private function render($view)
     {
-<<<<<<< Updated upstream
-        $this->user->insert([
-            "nom"=>"Plateau",
-            "prenom"=>"Leo",
-            "email"=>"leo.platau@estiam.com"
-        ]);
-    }
-}
-
-
-//        $this->user->find(["id"=>$id_user, "nom"=>"CATRIC"]);
-=======
         ob_start();
         extract ($this->vars);
         if(file_exists(VIEWS.DS.$view.".php")) {
@@ -83,4 +71,3 @@ class userController {
     }
 
 }
->>>>>>> Stashed changes
