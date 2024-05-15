@@ -7,6 +7,7 @@ class userModel {
     private $stmt;
     private $cond;
     private $data;
+    private $params;
 
     public function __construct()
     {
@@ -22,7 +23,7 @@ class userModel {
     {
         $this->sql = "SELECT * FROM ".$this->table;
         $result = $this->fetchAll();
-        var_dump($result);
+        return $result;
     }
 
     private function prepare() {
@@ -82,4 +83,31 @@ class userModel {
         return $this->dbh->lastInsertId();
     }
 
+<<<<<<< Updated upstream
+=======
+    public function update($data)
+    {
+        $this->sql = "UPDATE ".$this->table." SET ";
+        $this->params = $data;
+        $where = "";
+        foreach ($data as $k => $v) {
+            if($k == "id") {
+                $where .= " WHERE ".$k."= :".$k;
+            } else {
+                $this->sql .= $k."=:".$k.", ";
+            }
+        }
+        $this->sql = substr($this->sql, 0, -2);
+        $this->sql .= $where;
+
+        return $result = $this->executeSave();
+        }
+    
+    public function delete($data)
+    {
+        $this->sql = "DELETE FROM ".$this->table." WHERE id = :id";
+        $this->params = $data;
+        $res = $this->fetch();
+    }
+>>>>>>> Stashed changes
 }

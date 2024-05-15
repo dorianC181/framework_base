@@ -8,3 +8,4 @@ define("SRC", ROOT.DS."src");
 define("CONTROLLERS", SRC.DS."controllers");
 define("MODELS", SRC.DS."models");
 define("VIEWS", SRC.DS."views");
+define("TPLS", SRC.DS."templates");
