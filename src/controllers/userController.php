@@ -64,10 +64,9 @@ class userController {
 
     public function index($id_role)
     {
-        $this->loadModel('role');
-        $data = [
-            "libelle" => "test"
-        ];
-        $this->role->save($data);
+        
+
+        
+        $this->user->findAll();
     }
 }
