@@ -25,19 +25,6 @@ class userController {
         }
     }
 
-    private function loadModel($mdl_name)
-    {
-        $file_name = $mdl_name."Model";
-        
-        if(file_exists(MODELS.DS.$file_name.".php")) {
-            require_once(MODELS.DS.$file_name.".php");
-        } else {
-            echo "Le model n'existe pas";
-        }
-
-        $this->$mdl_name = new $file_name();
-    }
-
     private function render($view)
     {
         ob_start();
@@ -61,13 +48,51 @@ class userController {
     {
         $this->vars[$name] = $val;
     }
-    
 
+    public function insert () {
+        {
+            $data = [
+                "nom" => "Catric",
+                "prenom" => "Dorian",
+                "email" => "test",
+                "password" => "test"
+            ];
+            $this->user->insert($data);
+        }
+    }
+
+    public function update () {
+        {
+            $data = [
+                "nom" => "Jea",
+                "prenom" => "Michel",
+                "email" => "test",
+                "password" => "test"
+            ];
+            $this->user->update($data);
+        }
+    }
+
+    public function delete($id) {
+            $data = [
+                "id" => $id
+            ];
+            
+            $this->user->delete($data);
+    }
+
+<<<<<<< Updated upstream
     public function index()
     {
         $this->set("title", "User Index");
         $this->set("users", $this->user->findAll());
         $this->render("index");
+=======
+    public function index($id_role)
+    {   
+
+        $this->user->findAll();
+>>>>>>> Stashed changes
     }
 
 }
