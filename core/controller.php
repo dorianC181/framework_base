@@ -6,7 +6,7 @@ class Controller {
         if(method_exists($this, "__init")) {
             $this->__init();
         }
-        $ctrl_name = strc_replace("controller", "", get_class($this));
+        $ctrl_name = str_replace("controller", "", get_class($this));
         echo $ctrl_name;
         // $this->loadModel();
     }
