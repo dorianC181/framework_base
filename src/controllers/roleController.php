@@ -1,10 +1,12 @@
 <?php
-class roleController extends controller{
-    public function index()
-    {
 
-    }
+class roleController extends Controller {
+
     public function __init() {
-
+        
+    }
+    public function index() 
+    {
+        var_dump($this->role);
     }
 }

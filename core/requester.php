@@ -1,88 +1,124 @@
 <?php
-class requester {
-    private $table;
-    public $sql;
-    public $params;
 
-    public function __construct($t) {
+class Requester {
+    private $sql;
+    private $table; 
+    private $fields;
+    private $params = [];
+    private $relations = [];
+
+    public function __construct($t, $f) {
         $this->table = $t;
-    }
-    private function primaryKey() {
-        $this->sql = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '".$this->table."' AND COLUMN_KEY = 'PRI'";
-        return $this;
+        $this->fields = $f;
     }
 
     public function select($fields = "*") {
+        $this->sql = "SELECT ";
+
         if(is_array($fields)) {
-            $this->sql .= "SELECT ";
-            foreach($fields as $v)
-            {
+            foreach($fields as $v) {
                 $this->sql .= $v.', ';
             }
             $this->sql = substr($this->sql, 0, -2);
         } else {
-            $this->sql = "SELECT ".$fields;
-        }
+            $this->sql .= $fields;
+        }        
 
         return $this;
     }
 
     public function from($table = "") {
+        $this->sql .= " FROM ";
+
         if($table != "") {
             $this->table = $table;
         }
-        $this->sql .= " FROM ";
+
         if(is_array($table)) {
-            foreach($table as $t)
-            {
+            foreach($table as $t) {
                 $this->sql .= $t.', ';
             }
             $this->sql = substr($this->sql, 0, -2);
         } else {
             $this->sql .= $this->table;
         }
-
+        
         return $this;
     }
+    private function setParams($k, $v) 
+    {
+        $this->params = [$k => $v];
+    }
+
+    public function getParams() {
+        return $this->params;
+    }
+
+    public function getPrimaryKey()
+    {
+        foreach($this->fields as $k => $v) {
+            if(isset($v["is_PK"]) && $v["is_PK"]) {
+                return $k;
+            }
+        }
+    }
+
     public function where($cond) {
         $this->sql .= " WHERE ";
+        $count = 0;
         if(is_array($cond)) {
-            foreach($cond as $k => $v)
-            {
-                $this->sql .= $k.' = :'.$k.' AND ';
+            foreach($cond as $k => $v) {
+                if( $count > 0) {
+                    $this->sql .= " AND ".$k." = :".$k;
+                } else {
+                    $this->sql .= $k." = :".$k;
+                }
+                $count++;
             }
-            $this->sql = substr($this->sql, 0, -4);
         } else {
-            $this->sql .= $cond;
+            $pk = $this->getPrimaryKey();
+            $this->setParams($pk, $cond);
+            $this->sql .= $pk." = :".$pk;
         }
-        $this->params = $cond;
         return $this;
+
     }
 
-    public function ijoin() {
-        
-    }
-
-    public function insert($data) {
-        $this->sql = "INSERT INTO ".$this->table." (";
-        $this->params = $data;
-        $values = "";
-        foreach($data as $k => $v) {
-            $this->sql .= $k.', ';
-            $values .= ':'.$k.', ';
-        }
-        $this->sql = substr($this->sql, 0, -2).") VALUES (".substr($values, 0, -2).")";
-
+    public function join($relation) {
+        $this->sql .= " INNER JOIN ";
+        $this->relations = $relation;   
+        $this->sql .= $relation["relation"]." ON ".$this->table.".".$relation["field"]." = ".$relation["relation"].".id";
         return $this;
     }
 
     public function update() {
-        $thos->sql = "UPDATE ".$this->table." SET ";
-        $this->params = $data;
-        foreach($data as $k => $v) {
-            $this->sql .= $k.' = '.$v.', ';
+        $this->sql = "UPDATE ".$this->table. " SET ";
+        $fields = array_keys($this->fields);
+        $fields = $this->removePK($fields);
+        foreach($fields as $f) {
+            $this->sql .= $f." = :".$f.", ";
         }
         $this->sql = substr($this->sql, 0, -2);
+
+        $this->where($this->getPrimaryKey());
+        return $this;
+    }
+
+    public function insert() {
+        $this->sql = "INSERT INTO ".$this->table. " (";
+        
+        $fields = array_keys($this->fields);
+        $fields = $this->removePK($fields);
+        $values = "";
+
+        foreach($fields as $f) {
+            $this->sql .= $f.", ";
+            $values .= ":".$f.", ";
+        }
+        
+        $this->sql = substr($this->sql, 0, -2);
+        $values = substr($values, 0, -2);
+        $this->sql .= ") VALUES (".$values.")";
 
         return $this;
     }
@@ -91,5 +127,24 @@ class requester {
         $this->sql = "DELETE ";
         
         return $this;
+    }
+
+    public function getRequest() {
+        return $this->sql;
+    }
+
+    private function removePK($fields) 
+    {
+        $pk = $this->getPrimaryKey();
+        $rem = null;
+        foreach($fields as $k => $f) {
+            if($f == $pk) {
+                $rem = $k;
+                unset($fields[$k]);
+                break;
+            }
+        }
+
+       return $fields;
     }
 }
